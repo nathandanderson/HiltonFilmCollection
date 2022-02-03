@@ -6,18 +6,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mission4.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private NewMovieContext blahContext { get; set; }
 
         //Constructor
-        public HomeController(ILogger<HomeController> logger, NewMovieContext someName)
+        public HomeController( NewMovieContext someName)
         {
-            _logger = logger;
             blahContext = someName;
         }
 
@@ -42,6 +41,8 @@ namespace Mission4.Controllers
         [HttpGet]
         public IActionResult NewMovie()
         {
+            ViewBag.Categories = blahContext.Categories.OrderBy(x => x.CategoryName).ToList();
+
             return View();
         }
 
@@ -49,16 +50,69 @@ namespace Mission4.Controllers
         [HttpPost]
         public IActionResult NewMovie(MovieResponse mr)
         {
-            //writing to sql database and saving
-            blahContext.Add(mr);
-            blahContext.SaveChanges();
+            if (ModelState.IsValid)
+            {   //writing to sql database and saving
+                blahContext.Add(mr);
+                blahContext.SaveChanges();
+            }
+            else //If Invalid
+            {
+                ViewBag.Categories = blahContext.Categories.OrderBy(x => x.CategoryName).ToList();
 
+                return View(mr);
+            }
             return View("Confirmation", mr);
         }
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+
+        //Rendering Movie List dynamically, and making sure to link the value of categories to the id
+
+        [HttpGet]
+        public IActionResult MovieList()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var movies = blahContext.Responses
+                .Include(x => x.Category)
+                .OrderBy(x => x.Title)
+                .ToList();
+
+            return View(movies);
+        }
+        // Rendering the edit page based on the item they selected on the previous page.
+        [HttpGet]
+        public IActionResult Edit(int movieid)
+        {
+            ViewBag.Categories = blahContext.Categories.OrderBy(x=>x.CategoryName).ToList();
+
+            var movie = blahContext.Responses.Single(x => x.MovieID == movieid);
+
+            return View("NewMovie", movie);
+        }
+        // Saving the edits they made on the edit page.
+        [HttpPost]
+        public IActionResult Edit(MovieResponse blah)
+        {
+            blahContext.Update(blah);
+            blahContext.SaveChanges();
+
+            return RedirectToAction("MovieList");
+        }
+
+        //Render the delete page for a given movie
+        [HttpGet]
+        public IActionResult Delete(int movieid)
+        {
+            var movie = blahContext.Responses.Single(x => x.MovieID == movieid);
+
+            return View(movie);
+        }
+
+        //Actually delete the movie after asking for confirmation
+        [HttpPost]
+        public IActionResult Delete (MovieResponse mr)
+        {
+            blahContext.Responses.Remove(mr);
+            blahContext.SaveChanges();
+
+            return RedirectToAction("MovieList");
         }
     }
 }

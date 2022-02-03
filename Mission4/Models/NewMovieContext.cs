@@ -15,8 +15,23 @@ namespace Mission4.Models
             //Leave blank for now
         }
         public DbSet<MovieResponse> Responses { get; set; }
+        public DbSet<Category> Categories { get; set; }
         protected override void OnModelCreating(ModelBuilder mb)
         {
+
+            mb.Entity<Category>().HasData(
+            //Categories to seed
+                new Category { CategoryID = 1, CategoryName = "Science Fiction" },
+                new Category { CategoryID = 2, CategoryName = "Action/Adventure" },
+                new Category { CategoryID = 3, CategoryName = "Comedy" },
+                new Category { CategoryID = 4, CategoryName = "Drama" },
+                new Category { CategoryID = 5, CategoryName = "Family" },
+                new Category { CategoryID = 6, CategoryName = "Horror/Suspense" },
+                new Category { CategoryID = 7, CategoryName = "Miscellaneous" },
+                new Category { CategoryID = 8, CategoryName = "Television" },
+                new Category { CategoryID = 9, CategoryName = "VHS" }
+                );
+
             mb.Entity<MovieResponse>().HasData(
 
                 //Movies to seed
@@ -24,7 +39,7 @@ namespace Mission4.Models
                     new MovieResponse
                     {
                         MovieID = 1,
-                        Category = "Science Fiction",
+                        CategoryID = 1,
                         Title = "Tron Legacy",
                         Year = 2012,
                         Director = "Joseph Kosinski",
@@ -36,7 +51,7 @@ namespace Mission4.Models
                     new MovieResponse
                     {
                         MovieID = 2,
-                        Category = "Science Fiction",
+                        CategoryID = 1,
                         Title = "Tenet",
                         Year = 2020,
                         Director = "Christopher Nolan",
@@ -48,7 +63,7 @@ namespace Mission4.Models
                     new MovieResponse
                     {
                         MovieID = 3,
-                        Category = "Science Fiction",
+                        CategoryID = 1,
                         Title = "Interstellar",
                         Year = 2012,
                         Director = "Christopher Nolan",

@@ -15,15 +15,75 @@ namespace Mission4.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.22");
 
+            modelBuilder.Entity("Mission4.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CategoryID");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryID = 1,
+                            CategoryName = "Science Fiction"
+                        },
+                        new
+                        {
+                            CategoryID = 2,
+                            CategoryName = "Action/Adventure"
+                        },
+                        new
+                        {
+                            CategoryID = 3,
+                            CategoryName = "Comedy"
+                        },
+                        new
+                        {
+                            CategoryID = 4,
+                            CategoryName = "Drama"
+                        },
+                        new
+                        {
+                            CategoryID = 5,
+                            CategoryName = "Family"
+                        },
+                        new
+                        {
+                            CategoryID = 6,
+                            CategoryName = "Horror/Suspense"
+                        },
+                        new
+                        {
+                            CategoryID = 7,
+                            CategoryName = "Miscellaneous"
+                        },
+                        new
+                        {
+                            CategoryID = 8,
+                            CategoryName = "Television"
+                        },
+                        new
+                        {
+                            CategoryID = 9,
+                            CategoryName = "VHS"
+                        });
+                });
+
             modelBuilder.Entity("Mission4.Models.MovieResponse", b =>
                 {
                     b.Property<int>("MovieID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Director")
                         .IsRequired()
@@ -52,13 +112,15 @@ namespace Mission4.Migrations
 
                     b.HasKey("MovieID");
 
+                    b.HasIndex("CategoryID");
+
                     b.ToTable("Responses");
 
                     b.HasData(
                         new
                         {
                             MovieID = 1,
-                            Category = "Science Fiction",
+                            CategoryID = 1,
                             Director = "Joseph Kosinski",
                             Edited = false,
                             LentTo = "Nathan Anderson",
@@ -70,7 +132,7 @@ namespace Mission4.Migrations
                         new
                         {
                             MovieID = 2,
-                            Category = "Science Fiction",
+                            CategoryID = 1,
                             Director = "Christopher Nolan",
                             Edited = false,
                             LentTo = "Joey Tate",
@@ -82,7 +144,7 @@ namespace Mission4.Migrations
                         new
                         {
                             MovieID = 3,
-                            Category = "Science Fiction",
+                            CategoryID = 1,
                             Director = "Christopher Nolan",
                             Edited = true,
                             LentTo = "Tyler Nelson",
@@ -91,6 +153,15 @@ namespace Mission4.Migrations
                             Title = "Interstellar",
                             Year = 2012
                         });
+                });
+
+            modelBuilder.Entity("Mission4.Models.MovieResponse", b =>
+                {
+                    b.HasOne("Mission4.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
