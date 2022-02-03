@@ -30,7 +30,7 @@ namespace Mission4.Controllers
         //Submission confirmation page
         public IActionResult Confirmation()
         {
-            return View(TESTINGHERETESTINGHERETESTINGHERETESTINGHERETESTINGHERETESTINGHERETESTINGHERE);
+            return View();
         }
 
         // My Podcasts page
