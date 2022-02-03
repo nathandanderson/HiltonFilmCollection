@@ -27,6 +27,7 @@ namespace Mission4
         {
             services.AddControllersWithViews();
 
+            //configuring connection to sql database
             services.AddDbContext<NewMovieContext>(options =>
             {
                 options.UseSqlite(Configuration["ConnectionStrings:BlahConnection"]);

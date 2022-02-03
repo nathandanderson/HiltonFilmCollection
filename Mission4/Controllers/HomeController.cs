@@ -21,29 +21,35 @@ namespace Mission4.Controllers
             blahContext = someName;
         }
 
+        //Home Page
         public IActionResult Index()
         {
             return View();
         }
 
+        //Submission confirmation page
         public IActionResult Confirmation()
         {
-            return View();
+            return View(TESTINGHERETESTINGHERETESTINGHERETESTINGHERETESTINGHERETESTINGHERETESTINGHERE);
         }
 
+        // My Podcasts page
         public IActionResult MyPodcasts()
         {
             return View();
         }
+        // Display page for New Movie Form
         [HttpGet]
         public IActionResult NewMovie()
         {
             return View();
         }
 
+        //Posting form information page
         [HttpPost]
         public IActionResult NewMovie(MovieResponse mr)
         {
+            //writing to sql database and saving
             blahContext.Add(mr);
             blahContext.SaveChanges();
 

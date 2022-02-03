@@ -19,6 +19,8 @@ namespace Mission4.Models
         {
             mb.Entity<MovieResponse>().HasData(
 
+                //Movies to seed
+
                     new MovieResponse
                     {
                         MovieID = 1,
